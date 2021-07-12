@@ -1,7 +1,11 @@
-import MainGrid from '../src/components/MainGrid';
-import Box from '../src/components/Box';
-import ProfileRelationsBoxWrapper from '../src/components/ProfileRelations';
-import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutMenuProfileSidebar } from '../src/lib/AlurakutCommons';
+import { useState, useEffect } from "react";
+import MainGrid from "../src/components/MainGrid";
+import Box from "../src/components/Box";
+import ProfileRelationsBoxWrapper from "../src/components/ProfileRelations";
+import {
+  AlurakutMenu,
+  OrkutNostalgicIconSet,
+} from "../src/lib/AlurakutCommons";
 
 function ProfileSideBar({ githubUser }) {
   return (
@@ -14,85 +18,69 @@ function ProfileSideBar({ githubUser }) {
   );
 }
 
-export default function Home() {
-  const githubUser = 'nathyts';
+function DevsSidebar({ githubUser }) {
+  const [follower, setFollower] = useState([]);
 
-  const favoritesPeople = [
-    'viitoriaferreiraa', 
-    'ThamirezBastos',
-    'andressadotpy',
-    'juunegreiros', 
-    'omariosouto', 
-    'peas'
-  ]
+  useEffect(async () => {
+    const url = `https://api.github.com/users/${githubUser}/followers`;
+    const response = await fetch(url);
+    setFollower(await response.json());
+  }, []);
+
+  const followers = follower.slice(0, 6);
+
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">Devs ({follower.length})</h2>
+
+      <ul>
+        {followers.map((follower) => {
+          return (
+            <li key={follower.id}>
+              <a href={follower.html_url}>
+                <img
+                  src={`https://github.com/${follower.login}.png`}
+                  style={{ borderRadius: "8px" }}
+                />
+                <span>{follower.login}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  );
+}
+
+export default function Home() {
+  const githubUser = "nathyts";
 
   return (
     <>
       <AlurakutMenu githubUser={githubUser} />
-        
+
       <MainGrid>
-        <div
-          className="profileArea"
-          style={{ gridArea: "profileArea" }}
-        >
-
-          <ProfileSideBar 
-            githubUser = {githubUser}
-          />
-
+        <div className="profileArea" style={{ gridArea: "profileArea" }}>
+          <ProfileSideBar githubUser={githubUser} />
         </div>
 
-        <div 
-          className="welcomeArea" 
-          style={{ gridArea: "welcomeArea" }}
-        >
-
+        <div className="welcomeArea" style={{ gridArea: "welcomeArea" }}>
           <Box>
-            <h1 className="title">
-              Bem vindo
-            </h1>
+            <h1 className="title">Bem vindo</h1>
 
             <OrkutNostalgicIconSet />
           </Box>
-          
         </div>
 
-        <div 
-          className="profileRelationsArea" 
+        <div
+          className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
+          <DevsSidebar githubUser={githubUser}/>
 
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Devs ({favoritesPeople.length})
-            </h2>
-
-            <ul>
-              {favoritesPeople.map(people => {
-                return(
-                  <li
-                    key={people}
-                  >
-                    <a 
-                      href={`/users/${people}`}
-                    >
-                      <img 
-                        src={`https://github.com/${people}.png`}
-                        style={{ borderRadius: "8px" }}
-                      />
-                      <span>{people}</span>
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
-
-          <ProfileRelationsBoxWrapper>
-            Comunidades
-          </ProfileRelationsBoxWrapper>
+          <ProfileRelationsBoxWrapper>Comunidades</ProfileRelationsBoxWrapper>
         </div>
-    </MainGrid>
+      </MainGrid>
     </>
-  )
+  );
 }
