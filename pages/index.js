@@ -62,8 +62,69 @@ function DevsSidebar({ githubUser }) {
   );
 }
 
+function CommunitySidebar({ community }) {
+  const communitys = community.slice(0, 6);
+
+  return(
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">Comunidades ({community.length})</h2>
+
+      <ul>
+        {communitys.map((community) => {
+          return (
+            <li key={community.id}>
+              <a href={community.link !== null ? community.link : "#"}>
+                <img
+                  src={community.image}
+                  style={{ borderRadius: "8px" }}
+                />
+                <span>{community.title}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  )
+}
+
 export default function Home() {
+  const [community, setCommunity] = useState([{
+    id: 0,
+    title: 'Eu odeio acordar cedo',
+    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
+    link: 'https://alurakut.vercel.app/'
+  }]);
+
+  const [titleCommunity, setTitleCommunity] = useState('');
+  const [imageCommunity, setImageCommunity] = useState('')
+
   const githubUser = "nathyts";
+
+  function handleCreateComunnity (event) {
+    event.preventDefault();
+
+    if(titleCommunity.length === 0) {
+      return alert('Informe um título');
+    }
+
+    if(imageCommunity.length === 0) {
+      return alert('Informe a URL de uma imagem');
+    }
+
+    const newCommunity = { 
+      id: community.length + 1,
+      title: titleCommunity,
+      image: `https://picsum.photos/200/${community.length}00`,
+      link: '#'
+    }
+
+    const updateCommunity = [...community, newCommunity];
+    setCommunity(updateCommunity);
+    setTitleCommunity('');
+    setImageCommunity('');
+    alert('Comunidade criada');
+  }
 
   return (
     <>
@@ -80,15 +141,45 @@ export default function Home() {
 
             <OrkutNostalgicIconSet />
           </Box>
+
+          <Box>
+            <h2 className="subTitle">O que você deseja fazer?</h2>
+            <form onSubmit={handleCreateComunnity} >
+              <div>
+                <input
+                  placeholder="Qual o nome da comunidade?"
+                  name="title"
+                  aria-label="Qual o nome da comunidade?"
+                  type="text"
+                  value={titleCommunity}
+                  onChange={event => setTitleCommunity(event.target.value)}
+                />
+              </div>
+
+              <div>
+                <input
+                  placeholder="Insira uma URL para imagem"
+                  name="image"
+                  aria-label="Insira uma URL para imagem"
+                  value={imageCommunity}
+                  onChange={event => setImageCommunity(event.target.value)}
+                />
+              </div>
+
+              <button>
+                Criar comunidade
+              </button>
+            </form>
+          </Box>
         </div>
 
         <div
           className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
-          <DevsSidebar githubUser={githubUser}/>
+          <DevsSidebar githubUser={githubUser} />
 
-          <ProfileRelationsBoxWrapper>Comunidades</ProfileRelationsBoxWrapper>
+          <CommunitySidebar community={community} />
         </div>
       </MainGrid>
     </>
