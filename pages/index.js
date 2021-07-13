@@ -4,6 +4,7 @@ import Box from "../src/components/Box";
 import ProfileRelationsBoxWrapper from "../src/components/ProfileRelations";
 import {
   AlurakutMenu,
+  AlurakutProfileSidebarMenuDefault,
   OrkutNostalgicIconSet,
 } from "../src/lib/AlurakutCommons";
 
@@ -14,6 +15,15 @@ function ProfileSideBar({ githubUser }) {
         src={`https://github.com/${githubUser}.png`}
         style={{ borderRadius: "8px" }}
       />
+      <hr/>
+      
+      <a className="boxLink" href={`https://github.com/${githubUser}.png`}>
+        @{ githubUser }
+      </a>
+      <hr/>
+
+      <AlurakutProfileSidebarMenuDefault />
+
     </Box>
   );
 }
