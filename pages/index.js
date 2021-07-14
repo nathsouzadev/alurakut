@@ -30,6 +30,13 @@ function ProfileSideBar({ githubUser }) {
 
 function DevsSidebar({ githubUser }) {
   const [follower, setFollower] = useState([]);
+  const [profileDetail, setProfileDetail] = useState([]);
+
+  useEffect(async () => {
+    const url = `https://api.github.com/users/${githubUser}`;
+    const response = await fetch(url);
+    setProfileDetail(await response.json());
+  }, []);
 
   useEffect(async () => {
     const url = `https://api.github.com/users/${githubUser}/followers`;
@@ -41,7 +48,7 @@ function DevsSidebar({ githubUser }) {
 
   return (
     <ProfileRelationsBoxWrapper>
-      <h2 className="smallTitle">Devs ({follower.length})</h2>
+      <h2 className="smallTitle">Devs ({profileDetail.followers})</h2>
 
       <ul>
         {followers.map((follower) => {
