@@ -80,9 +80,9 @@ function CommunitySidebar({ community }) {
         {communitys.map((community) => {
           return (
             <li key={community.id}>
-              <a href={community.link !== null ? community.link : "#"}>
+              <a href={community.Url !== null ? community.Url : "#"}>
                 <img
-                  src={community.image}
+                  src={community.imageUrl}
                   style={{ borderRadius: "8px" }}
                 />
                 <span>{community.title}</span>
@@ -96,17 +96,17 @@ function CommunitySidebar({ community }) {
 }
 
 export default function Home() {
-  const [community, setCommunity] = useState([{
-    id: 0,
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
-    link: 'https://alurakut.vercel.app/'
-  }]);
+  const [community, setCommunity] = useState([]);
 
   const [titleCommunity, setTitleCommunity] = useState('');
   const [imageCommunity, setImageCommunity] = useState('')
 
   const githubUser = "nathyts";
+
+  useEffect(async () => {
+    const data = await fetch("http://localhost:3000/api/community");
+    setCommunity(await data.json());
+  }, []);
 
   function handleCreateComunnity (event) {
     event.preventDefault();
@@ -120,17 +120,30 @@ export default function Home() {
     }
 
     const newCommunity = { 
-      id: community.length + 1,
       title: titleCommunity,
-      image: `https://picsum.photos/200/${community.length}00`,
-      link: '#'
+      imageUrl: `https://picsum.photos/200/${community.length}00`,
+      communityUrl: '#'
     }
 
-    const updateCommunity = [...community, newCommunity];
-    setCommunity(updateCommunity);
-    setTitleCommunity('');
-    setImageCommunity('');
-    alert('Comunidade criada');
+    fetch("/api/create-community", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newCommunity)
+    })
+    .then(async (response) => {
+      const data = await response.json();
+      console.log(data);
+      const updateCommunity = [...community, newCommunity];
+      setCommunity(updateCommunity);
+    })
+
+    // const updateCommunity = [...community, newCommunity];
+    // setCommunity(updateCommunity);
+    // setTitleCommunity('');
+    // setImageCommunity('');
+    // alert('Comunidade criada');
   }
 
   return (
