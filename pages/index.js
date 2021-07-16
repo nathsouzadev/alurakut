@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import nookies from "nookies";
+import jwt from "jsonwebtoken";
 import MainGrid from "../src/components/MainGrid";
 import Box from "../src/components/Box";
 import ProfileRelationsBoxWrapper from "../src/components/ProfileRelations";
@@ -95,13 +97,43 @@ function CommunitySidebar({ community }) {
   )
 }
 
-export default function Home() {
+export async function getServerSideProps(context) {
+  const token = nookies.get(context).USER_TOKEN;
+  const { githubUser } = jwt.decode(token)
+
+  // console.log(token)
+
+  // fetch('https://alurakut.vercel.app/api/auth', {
+  //   headers: {
+  //     Authorization: token
+  //   }
+  // }).
+  // then((response) => response.json())
+  // .then((result) => {
+  //   console.log(result);
+  // })
+
+  if(githubUser !== 'nathyts'){
+    return{
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+  
+  return{
+    props: {
+      githubUser: githubUser
+    },
+  }
+}
+
+export default function Home({ githubUser }) {
   const [community, setCommunity] = useState([]);
 
   const [titleCommunity, setTitleCommunity] = useState('');
   const [imageCommunity, setImageCommunity] = useState('')
-
-  const githubUser = "nathyts";
 
   useEffect(async () => {
     const data = await fetch("/api/community");

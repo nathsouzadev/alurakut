@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from 'next/router';
+import nookies from "nookies";
 
 export default function Login() {
     const [user, setUser] = useState('');
@@ -7,7 +8,21 @@ export default function Login() {
     
     const handleLogin = (event) => {
         event.preventDefault();
-        router.push('/')
+        fetch('https://alurakut.vercel.app/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ githubUser: user })
+        })
+        .then(async (response) => {
+            const data = await response.json();
+            nookies.set(null, 'USER_TOKEN', data.token, {
+                path: '/',
+                maxAge: 86400
+            });
+            router.push('/')
+        })
     }
 
     return(
@@ -39,6 +54,8 @@ export default function Login() {
                 <button type="submit" >
                     Login
                 </button>
+
+                {user !== '@nathyts' && <p>Informe o usuário correto</p>}
                 </form>
     
                 <footer className="box">
