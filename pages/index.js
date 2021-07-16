@@ -104,7 +104,7 @@ export default function Home() {
   const githubUser = "nathyts";
 
   useEffect(async () => {
-    const data = await fetch("http://localhost:3000/api/community");
+    const data = await fetch("/api/community");
     setCommunity(await data.json());
   }, []);
 
