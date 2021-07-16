@@ -1,4 +1,6 @@
 export default async function community(request, response) {
+    const TOKEN = '4b3a91908f2ed2e44fd7ce484074a2'
+    
     await fetch(
         'https://graphql.datocms.com/',
         {
@@ -6,7 +8,7 @@ export default async function community(request, response) {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `Bearer ${process.env.DATA_TOKEN}`,
+            'Authorization': `Bearer ${TOKEN}`,
           },
           body: JSON.stringify({
             "query": ` query {

@@ -134,16 +134,9 @@ export default function Home() {
     })
     .then(async (response) => {
       const data = await response.json();
-      console.log(data);
-      const updateCommunity = [...community, newCommunity];
+      const updateCommunity = [...community, data.newCommunity];
       setCommunity(updateCommunity);
     })
-
-    // const updateCommunity = [...community, newCommunity];
-    // setCommunity(updateCommunity);
-    // setTitleCommunity('');
-    // setImageCommunity('');
-    // alert('Comunidade criada');
   }
 
   return (
