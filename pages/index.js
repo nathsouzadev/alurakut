@@ -171,6 +171,10 @@ export default function Home({ githubUser }) {
     })
   }
 
+  const handleLogout = () => {
+    alert('Logout');
+  }
+
   return (
     <>
       <AlurakutMenu githubUser={githubUser} />
