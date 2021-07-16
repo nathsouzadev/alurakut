@@ -1,5 +1,5 @@
 export default async function community(request, response) {
-    const TOKEN = '441f486af29e86d7a55f5045bd9571'
+    const TOKEN = process.env.DATA_TOKEN
     
     await fetch(
         'https://graphql.datocms.com/',
