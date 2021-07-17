@@ -50,7 +50,7 @@ export async function getServerSideProps(context) {
   if(githubUser !== 'nathyts'){
     return{
       redirect: {
-        destination: '/',
+        destination: `/user/${githubUser}`,
         permanent: false,
       }
     }
