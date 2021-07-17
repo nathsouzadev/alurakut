@@ -17,6 +17,7 @@ export async function getStaticPaths() {
         fallback: 'blocking'
     }
 }
+
 export async function getStaticProps(context) {
     const githubUser = context.params.githubUser
 
