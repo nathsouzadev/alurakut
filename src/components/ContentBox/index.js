@@ -53,13 +53,13 @@ export function DevSidebar({ githubUser }) {
   
     return (
       <ProfileRelationsBoxWrapper>
-        <h2 className="smallTitle">Devs ({profileDetail.followers})</h2>
+        <h2 className="smallTitle">Seguidores ({profileDetail.followers})</h2>
   
         <ul>
           {followers.map((follower) => {
             return (
               <li key={follower.id}>
-                <a href={follower.html_url}>
+                <a href={`/user/${ follower.login }`}>
                   <img
                     src={`https://github.com/${follower.login}.png`}
                     style={{ borderRadius: "8px" }}
@@ -79,4 +79,52 @@ export function DevSidebar({ githubUser }) {
         </a>
       </ProfileRelationsBoxWrapper>
     );
+}
+
+export function FollowingSidebar({ githubUser }) {
+  const [follwing, setFollwing] = useState([]);
+  const [profileDetail, setProfileDetail] = useState([]);
+
+  useEffect(async () => {
+    const url = `https://api.github.com/users/${githubUser}`;
+    const response = await fetch(url);
+    setProfileDetail(await response.json());
+  }, []);
+
+  useEffect(async () => {
+    const url = `https://api.github.com/users/${githubUser}/following`;
+    const response = await fetch(url);
+    setFollwing(await response.json());
+  }, []);
+
+  const follwings = follwing.slice(0, 6);
+
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">Seguindo ({profileDetail.following})</h2>
+
+      <ul>
+        {follwings.map((follower) => {
+          return (
+            <li key={follower.id}>
+              <a href={`/user/${ follower.login }`}>
+                <img
+                  src={`https://github.com/${follower.login}.png`}
+                  style={{ borderRadius: "8px" }}
+                />
+                <span>{follower.login}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <hr />
+      <a 
+        href="#"
+      >
+        Ver todos
+      </a>
+    </ProfileRelationsBoxWrapper>
+  );
 }
