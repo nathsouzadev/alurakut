@@ -49,6 +49,11 @@ const ProfileRelationsBoxWrapper = styled(Box)`
       background-image: linear-gradient(0deg,#00000073,transparent);
     }
   }
+  a{
+    color: #2E7BB4;
+    font-weight: bold;
+    text-decoration: none;
+  }
 `
 
 export default ProfileRelationsBoxWrapper;

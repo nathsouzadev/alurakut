@@ -23,6 +23,12 @@ export function CommunitySidebar({ community }) {
             );
           })}
         </ul>
+        <hr />
+        <a 
+          href="#"
+        >
+          Ver todos
+        </a>
       </ProfileRelationsBoxWrapper>
     )
 }
@@ -64,6 +70,13 @@ export function DevSidebar({ githubUser }) {
             );
           })}
         </ul>
+
+        <hr />
+        <a 
+          href="#"
+        >
+          Ver todos
+        </a>
       </ProfileRelationsBoxWrapper>
     );
 }
